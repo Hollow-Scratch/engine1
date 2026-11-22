@@ -1,0 +1,112 @@
+# ==============================================================================
+# Build Directories & Artifacts
+# ==============================================================================
+build/
+build-*/
+cmake-build-*/
+out/
+bin/
+lib/
+dist/
+*.o
+*.obj
+*.lo
+*.slo
+*.a
+*.la
+*.so
+*.so.*
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+*.pdb
+*.ilk
+*.exp
+
+# ==============================================================================
+# CMake & Ninja Generated Files
+# ==============================================================================
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake
+_deps/
+*.cmake
+!CMakeLists.txt
+!cmake/*.cmake
+.ninja_deps
+.ninja_log
+build.ninja
+rules.ninja
+
+# ==============================================================================
+# Language Servers & Tooling (clangd, ccls, etc.)
+# ==============================================================================
+compile_commands.json
+.cache/
+.clangd/
+.ccls-cache/
+
+# ==============================================================================
+# Editors & IDEs (Neovim, VS Code, CLion, Visual Studio)
+# ==============================================================================
+# Vim / Neovim
+*.swp
+*.swo
+*~
+Session.vim
+.nvim/
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# JetBrains / CLion
+.idea/
+
+# Visual Studio
+.vs/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+
+# ==============================================================================
+# Profiling, Debugging & Crash Dumps
+# ==============================================================================
+core
+core.*
+vgcore.*
+gmon.out
+perf.data
+perf.data.old
+*.profraw
+*.profdata
+*.gcda
+*.gcno
+*.gcov
+
+# ==============================================================================
+# OS-Specific Junk
+# ==============================================================================
+# Linux
+.directory
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
