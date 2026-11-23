@@ -1,6 +1,7 @@
 #ifndef HOLLOWENGINE_PLATFORM_HEADER
 #define HOLLOWENGINE_PLATFORM_HEADER
 
+#define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
 typedef struct WindowsSpecification {

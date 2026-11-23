@@ -1,5 +1,4 @@
 #include "platform.h"
-#include <GLFW/glfw3.h>
 #include <stdio.h>
 
 GLFWwindow *window = nullptr;
@@ -10,6 +9,8 @@ bool platform_init(WindowsSpecification *WindowsSpecs) {
     printf("GLFW init error\n");
     return -1;
   };
+  glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+  glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
   window = glfwCreateWindow(WindowsSpecs->Width, WindowsSpecs->Height,
                             WindowsSpecs->title, NULL, NULL);
@@ -18,14 +19,10 @@ bool platform_init(WindowsSpecification *WindowsSpecs) {
     glfwTerminate();
     return -1;
   }
-  glfwMakeContextCurrent(window);
   return true;
 }
 
-void platform_update() {
-  glfwSwapBuffers(window);
-  glfwPollEvents();
-}
+void platform_update() { glfwPollEvents(); }
 
 void platform_shutdown() { glfwTerminate(); }
 
