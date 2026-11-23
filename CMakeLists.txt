@@ -12,4 +12,9 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable( HollowEngine
 	source/engine/main/main.c
 	source/engine/main/game_test.c
+	source/engine/main/platform.c
 )
+
+add_subdirectory(external/glfw)
+
+target_link_libraries(HollowEngine PRIVATE glfw)
