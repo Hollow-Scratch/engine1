@@ -7,22 +7,22 @@
 bool Running = true;
 
 WindowsSpecification specs = {
-    .Height = 1920, .Width = 1080, .title = "HollowEngine"};
+	.Height = 1920, .Width = 1080, .title = "HollowEngine"};
 
 int main() {
 
-  Init();
-  platform_init(&specs);
-  initVulkan();
+	Init();
+	platform_init(&specs);
+	initVulkan();
 
-  sleep(10);
-  while (Running && !platform_shouldclose()) {
-    Update(0.00000000000000000016);
-    platform_update();
-  }
+	sleep(10);
+	while (Running && !platform_shouldclose()) {
+		Update(0.00000000000000000016);
+		platform_update();
+	}
 
-  Shutdown();
-  platform_shutdown();
+	Shutdown();
+	platform_shutdown();
 
-  return 0;
+	return 0;
 }

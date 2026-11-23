@@ -5,9 +5,9 @@
 #include <GLFW/glfw3.h>
 
 typedef struct WindowsSpecification {
-  const char *title;
-  int Width;
-  int Height;
+	const char *title;
+	int Width;
+	int Height;
 } WindowsSpecification;
 
 extern WindowsSpecification *WinSpecs;
