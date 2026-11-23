@@ -10,10 +10,12 @@ typedef struct WindowsSpecification {
 } WindowsSpecification;
 
 extern WindowsSpecification *WinSpecs;
-GLFWwindow *window = nullptr;
+extern GLFWwindow *window;
 
 bool platform_init(WindowsSpecification *WindowSpecs);
 void platform_update();
 void platform_shutdown();
+
+bool platform_shouldclose();
 
 #endif

@@ -12,7 +12,7 @@ int main() {
   Init();
   platform_init(&specs);
 
-  while (Running) {
+  while (Running && !platform_shouldclose()) {
     Update(0.016);
     platform_update();
   }

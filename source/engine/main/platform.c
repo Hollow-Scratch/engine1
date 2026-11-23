@@ -2,6 +2,8 @@
 #include <GLFW/glfw3.h>
 #include <stdio.h>
 
+GLFWwindow *window = nullptr;
+
 bool platform_init(WindowsSpecification *WindowsSpecs) {
 
   if (!glfwInit()) {
@@ -9,7 +11,7 @@ bool platform_init(WindowsSpecification *WindowsSpecs) {
     return -1;
   };
 
-  window = glfwCreateWindow(WindowsSpecs->Height, WindowsSpecs->Width,
+  window = glfwCreateWindow(WindowsSpecs->Width, WindowsSpecs->Height,
                             WindowsSpecs->title, NULL, NULL);
 
   if (!window) {
@@ -26,3 +28,5 @@ void platform_update() {
 }
 
 void platform_shutdown() { glfwTerminate(); }
+
+bool platform_shouldclose() { return glfwWindowShouldClose(window); }
