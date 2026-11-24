@@ -1,38 +1,38 @@
 #include "app.h"
+#include "main/time.h"
 #include "platform/platform.h"
 #include "renderer/vulkan.h"
-#include "main/time.h"
 
 bool isRunning = true;
 
 WindowSpecification specs = {
-    .width = 1920,
-    .height = 1080,
-    .title = "HollowEngine",
+	.width	= 1920,
+	.height = 1080,
+	.title	= "HollowEngine",
 };
 
 int main(void) {
-    initializeApp();
+	initializeApp();
 
-    platformInit(&specs);
-    time_init();
+	platformInit(&specs);
+	time_init();
 
-    initializeVulkan();
+	initializeVulkan();
 
-    while (isRunning && !platformShouldClose()) {
-        time_update();
+	while (isRunning && !platformShouldClose()) {
+		time_update();
 
-        double dt = time_get_delta();
+		double dt = time_get_delta();
 
-        updateApp(dt);
-        drawVulkanFrame();
+		updateApp(dt);
+		drawVulkanFrame();
 
-        platformUpdate();
-    }
+		platformUpdate();
+	}
 
-    cleanupVulkan();
-    platformShutdown();
-    shutdownApp();
+	cleanupVulkan();
+	platformShutdown();
+	shutdownApp();
 
-    return 0;
+	return 0;
 }

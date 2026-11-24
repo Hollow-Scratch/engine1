@@ -3,9 +3,9 @@
 #define ENGINE_TIME_H
 
 typedef struct {
-    double delta_time;
-    double elapsed_time;
-    double frame_rate;
+	double delta_time;
+	double elapsed_time;
+	double frame_rate;
 } EngineTime;
 
 void time_init(void);
