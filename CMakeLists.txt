@@ -12,6 +12,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable( HollowEngine
 	source/engine/main/main.c
 	source/engine/main/game_test.c
+	source/engine/main/time.c
 	source/engine/platform/platform.c
 	source/engine/renderer/vulkan.c
 	source/engine/utils/vector.c

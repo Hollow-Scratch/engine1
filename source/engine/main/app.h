@@ -5,5 +5,5 @@
 extern bool isRunning;
 
 void initializeApp(void);
-void updateApp(float deltaTime);
+void updateApp(double deltaTime);
 void shutdownApp(void);

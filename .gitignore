@@ -59,6 +59,7 @@ compile_commands.json
 *~
 Session.vim
 .nvim/
+*.spv
 
 # VS Code
 .vscode/*

@@ -4,9 +4,9 @@
 
 void initializeApp(void) {}
 
-void updateApp(float deltaTime) {
+void updateApp(double deltaTime) {
 	(void)deltaTime;
-	printf(" 1... 2... 3... Testing Hello!\n");
+	printf(" 1... 2... 3... Testing Hello! delta is %f\n", deltaTime);
 }
 
 void shutdownApp(void) {}
