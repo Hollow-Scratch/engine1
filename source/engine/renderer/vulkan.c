@@ -1,5 +1,5 @@
-
 #include "vulkan.h"
+#include "../utils/vector.h"
 
 #include <GLFW/glfw3.h>
 #include <stdint.h>
@@ -21,27 +21,29 @@ static bool checkExtensionSupport(const char **requiredExtensions,
 		return false;
 	}
 
-	VkExtensionProperties *availableExtensions =
-		malloc(sizeof(VkExtensionProperties) * extensionCount);
+	// Automatically calls vector_free(&availableExtensions) on every return path!
+	VECTOR_AUTO availableExtensions = VECTOR_INIT(VkExtensionProperties);
+	vector_resize(&availableExtensions, extensionCount);
 
-	if (availableExtensions == NULL && extensionCount > 0) {
+	if (availableExtensions.data == NULL && extensionCount > 0) {
 		printf("Failed to allocate extension memory\n");
 		return false;
 	}
 
 	result = vkEnumerateInstanceExtensionProperties(NULL, &extensionCount,
-													availableExtensions);
+													availableExtensions.data);
 
 	if (result != VK_SUCCESS) {
 		printf("Failed to retrieve Vulkan extensions: %d\n", result);
-		free(availableExtensions);
-		return false;
+		return false; // No manual free needed!
 	}
 
 	printf("\nAvailable Vulkan extensions:\n");
 
-	for (uint32_t i = 0; i < extensionCount; i++) {
-		printf("  %s\n", availableExtensions[i].extensionName);
+	for (size_t i = 0; i < availableExtensions.length; i++) {
+		VkExtensionProperties ext =
+			VECTOR_GET(availableExtensions, VkExtensionProperties, i);
+		printf("  %s\n", ext.extensionName);
 	}
 
 	bool supported = true;
@@ -49,9 +51,11 @@ static bool checkExtensionSupport(const char **requiredExtensions,
 	for (uint32_t i = 0; i < requiredCount; i++) {
 		bool found = false;
 
-		for (uint32_t j = 0; j < extensionCount; j++) {
-			if (strcmp(requiredExtensions[i],
-					   availableExtensions[j].extensionName) == 0) {
+		for (size_t j = 0; j < availableExtensions.length; j++) {
+			VkExtensionProperties ext =
+				VECTOR_GET(availableExtensions, VkExtensionProperties, j);
+
+			if (strcmp(requiredExtensions[i], ext.extensionName) == 0) {
 				found = true;
 				break;
 			}
@@ -64,9 +68,7 @@ static bool checkExtensionSupport(const char **requiredExtensions,
 		}
 	}
 
-	free(availableExtensions);
-
-	return supported;
+	return supported; // vector_free runs automatically right here
 }
 
 void createInstance(void) {

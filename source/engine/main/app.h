@@ -8,4 +8,3 @@ void Shutdown();
 extern bool Running;
 
 #endif
-git
