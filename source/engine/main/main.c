@@ -2,28 +2,28 @@
 #include "app.h"
 #include "platform.h"
 
-bool Running = true;
+bool isRunning = true;
 
-WindowsSpecification specs = {
-	.Width = 1920,
-	.Height = 1080,
+WindowSpecification specs = {
+	.width = 1920,
+	.height = 1080,
 	.title = "HollowEngine",
 };
 
 int main(void) {
-	Init();
-	platform_init(&specs);
-	initVulkan();
+	initializeApp();
+	platformInit(&specs);
+	initializeVulkan();
 
-	while (Running && !platform_shouldclose()) {
-		Update(0.016f);
+	while (isRunning && !platformShouldClose()) {
+		updateApp(0.016f);
 		drawVulkanFrame();
-		platform_update();
+		platformUpdate();
 	}
 
 	cleanupVulkan();
-	platform_shutdown();
-	Shutdown();
+	platformShutdown();
+	shutdownApp();
 
 	return 0;
 }

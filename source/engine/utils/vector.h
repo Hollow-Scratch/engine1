@@ -1,19 +1,21 @@
 #pragma once
+
 #include <stdbool.h>
 #include <stddef.h>
 
-typedef struct vector {
+typedef struct Vector {
 	void *data;
 	size_t length;
 	size_t capacity;
-	size_t element_size;
-} vector;
+	size_t elementSize;
+} Vector;
 
-#define VECTOR_INIT(type) (vector){ .element_size = sizeof(type) }
+#define VECTOR_INIT(type)                                                      \
+	(Vector) { .elementSize = sizeof(type) }
 #define VECTOR_GET(vec, type, index) (((type *)(vec).data)[index])
-#define VECTOR_AUTO __attribute__((cleanup(vector_free))) vector
+#define VECTOR_AUTO __attribute__((cleanup(vectorFree))) Vector
 
-void vector_append(vector *vec, const void *value);
-bool vector_pop(vector *vec, void *out_value);
-void vector_resize(vector *vec, size_t new_length);
-void vector_free(vector *vec);
+void vectorAppend(Vector *vec, const void *value);
+bool vectorPop(Vector *vec, void *outValue);
+void vectorResize(Vector *vec, size_t newLength);
+void vectorFree(Vector *vec);

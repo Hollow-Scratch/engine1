@@ -1,8 +1,11 @@
 #include "app.h"
 #include <stdio.h>
 
-void Init() {}
+void initializeApp(void) {}
 
-void Update(float DeltaTime) { printf(" 1... 2... 3... Testing Hello!\n"); }
+void updateApp(float deltaTime) {
+	(void)deltaTime;
+	printf(" 1... 2... 3... Testing Hello!\n");
+}
 
-void Shutdown() {}
+void shutdownApp(void) {}

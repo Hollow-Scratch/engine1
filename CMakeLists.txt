@@ -22,3 +22,7 @@ add_subdirectory(external/glfw)
 find_package(Vulkan REQUIRED)
 
 target_link_libraries(HollowEngine PRIVATE Vulkan::Vulkan glfw)
+
+if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+	target_compile_options(HollowEngine PRIVATE -Wall -Wextra -Wstrict-prototypes)
+endif()

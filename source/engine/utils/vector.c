@@ -2,37 +2,37 @@
 #include <stdlib.h>
 #include <string.h>
 
-void vector_append(vector *vec, const void *value) {
+void vectorAppend(Vector *vec, const void *value) {
 	if (vec->length >= vec->capacity) {
 		vec->capacity = (vec->capacity == 0) ? 2 : vec->capacity * 2;
-		vec->data = realloc(vec->data, vec->capacity * vec->element_size);
+		vec->data = realloc(vec->data, vec->capacity * vec->elementSize);
 	}
-	void *dest = (char *)vec->data + (vec->length * vec->element_size);
-	memcpy(dest, value, vec->element_size);
+	void *dest = (char *)vec->data + (vec->length * vec->elementSize);
+	memcpy(dest, value, vec->elementSize);
 	vec->length++;
 }
 
-bool vector_pop(vector *vec, void *out_value) {
+bool vectorPop(Vector *vec, void *outValue) {
 	if (vec->length == 0) {
 		return false;
 	}
 	vec->length--;
-	if (out_value != NULL) {
-		void *src = (char *)vec->data + (vec->length * vec->element_size);
-		memcpy(out_value, src, vec->element_size);
+	if (outValue != NULL) {
+		void *src = (char *)vec->data + (vec->length * vec->elementSize);
+		memcpy(outValue, src, vec->elementSize);
 	}
 	return true;
 }
 
-void vector_resize(vector *vec, size_t new_length) {
-	if (new_length > vec->capacity) {
-		vec->capacity = new_length * 2;
-		vec->data = realloc(vec->data, vec->capacity * vec->element_size);
+void vectorResize(Vector *vec, size_t newLength) {
+	if (newLength > vec->capacity) {
+		vec->capacity = newLength * 2;
+		vec->data = realloc(vec->data, vec->capacity * vec->elementSize);
 	}
-	vec->length = new_length;
+	vec->length = newLength;
 }
 
-void vector_free(vector *vec) {
+void vectorFree(Vector *vec) {
 	free(vec->data);
 	vec->data = NULL;
 	vec->length = 0;

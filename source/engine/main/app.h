@@ -1,10 +1,9 @@
-#ifndef HOLLOWENGINE_APPLICATION_HEADER
-#define HOLLOWENGINE_APPLICATION_HEADER
+#pragma once
 
-void Init();
-void Update(float DeltaTime);
-void Shutdown();
+#include <stdbool.h>
 
-extern bool Running;
+extern bool isRunning;
 
-#endif
+void initializeApp(void);
+void updateApp(float deltaTime);
+void shutdownApp(void);

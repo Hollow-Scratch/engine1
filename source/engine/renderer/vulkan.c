@@ -7,7 +7,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <vulkan/vulkan_core.h>
 
 VkInstance instance = VK_NULL_HANDLE;
 VkSurfaceKHR surface = VK_NULL_HANDLE;
@@ -18,8 +17,8 @@ VkQueue presentQueue = VK_NULL_HANDLE;
 VkSwapchainKHR swapchain = VK_NULL_HANDLE;
 VkFormat swapchainImageFormat;
 VkExtent2D swapchainExtent;
-vector swapchainImages = {0};	  // Stores VkImage handles
-vector swapchainImageViews = {0}; // Stores VkImageView handles
+Vector swapchainImages = {0};	  // Stores VkImage handles
+Vector swapchainImageViews = {0}; // Stores VkImageView handles
 VkCommandPool commandPool = VK_NULL_HANDLE;
 VkCommandBuffer commandBuffer = VK_NULL_HANDLE;
 VkSemaphore imageAvailableSemaphore = VK_NULL_HANDLE;
@@ -28,21 +27,21 @@ VkFence inFlightFence = VK_NULL_HANDLE;
 VkRenderPass renderPass = VK_NULL_HANDLE;
 VkPipelineLayout pipelineLayout = VK_NULL_HANDLE;
 VkPipeline graphicsPipeline = VK_NULL_HANDLE;
-vector swapchainFramebuffers = {0}; // Stores VkFramebuffer handles
+Vector swapchainFramebuffers = {0}; // Stores VkFramebuffer handles
 
 static VkDebugUtilsMessengerEXT debugMessenger = VK_NULL_HANDLE;
 
 #ifdef NDEBUG
-static const bool enableValidationLayers = false;
+static const bool ENABLE_VALIDATION_LAYERS = false;
 #else
-static const bool enableValidationLayers = true;
+static const bool ENABLE_VALIDATION_LAYERS = true;
 #endif
 
-static const char *validationLayers[] = {"VK_LAYER_KHRONOS_validation"};
-static const uint32_t validationLayerCount = 1;
+static const char *VALIDATION_LAYERS[] = {"VK_LAYER_KHRONOS_validation"};
+static const uint32_t VALIDATION_LAYER_COUNT = 1;
 
-static const char *deviceExtensions[] = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
-static const uint32_t deviceExtensionCount = 1;
+static const char *DEVICE_EXTENSIONS[] = {VK_KHR_SWAPCHAIN_EXTENSION_NAME};
+static const uint32_t DEVICE_EXTENSION_COUNT = 1;
 
 typedef struct {
 	uint32_t graphicsFamily;
@@ -63,7 +62,7 @@ static QueueFamilyIndices findQueueFamilies(VkPhysicalDevice targetDevice) {
 											 NULL);
 
 	VECTOR_AUTO queueFamilies = VECTOR_INIT(VkQueueFamilyProperties);
-	vector_resize(&queueFamilies, queueFamilyCount);
+	vectorResize(&queueFamilies, queueFamilyCount);
 	vkGetPhysicalDeviceQueueFamilyProperties(targetDevice, &queueFamilyCount,
 											 queueFamilies.data);
 
@@ -98,17 +97,17 @@ static bool checkDeviceExtensionSupport(VkPhysicalDevice targetDevice) {
 										 NULL);
 
 	VECTOR_AUTO availableExtensions = VECTOR_INIT(VkExtensionProperties);
-	vector_resize(&availableExtensions, extensionCount);
+	vectorResize(&availableExtensions, extensionCount);
 	vkEnumerateDeviceExtensionProperties(targetDevice, NULL, &extensionCount,
 										 availableExtensions.data);
 
-	for (uint32_t i = 0; i < deviceExtensionCount; i++) {
+	for (uint32_t i = 0; i < DEVICE_EXTENSION_COUNT; i++) {
 		bool found = false;
 		for (size_t j = 0; j < availableExtensions.length; j++) {
 			VkExtensionProperties ext =
 				VECTOR_GET(availableExtensions, VkExtensionProperties, j);
 
-			if (strcmp(deviceExtensions[i], ext.extensionName) == 0) {
+			if (strcmp(DEVICE_EXTENSIONS[i], ext.extensionName) == 0) {
 				found = true;
 				break;
 			}
@@ -151,7 +150,7 @@ static void pickPhysicalDevice(void) {
 	}
 
 	VECTOR_AUTO devices = VECTOR_INIT(VkPhysicalDevice);
-	vector_resize(&devices, deviceCount);
+	vectorResize(&devices, deviceCount);
 	vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data);
 
 	printf("\nDetected Vulkan GPUs:\n");
@@ -193,9 +192,9 @@ static void createLogicalDevice(void) {
 	QueueFamilyIndices indices = findQueueFamilies(physicalDevice);
 
 	VECTOR_AUTO uniqueQueueFamilies = VECTOR_INIT(uint32_t);
-	vector_append(&uniqueQueueFamilies, &indices.graphicsFamily);
+	vectorAppend(&uniqueQueueFamilies, &indices.graphicsFamily);
 	if (indices.presentFamily != indices.graphicsFamily) {
-		vector_append(&uniqueQueueFamilies, &indices.presentFamily);
+		vectorAppend(&uniqueQueueFamilies, &indices.presentFamily);
 	}
 
 	VECTOR_AUTO queueCreateInfos = VECTOR_INIT(VkDeviceQueueCreateInfo);
@@ -210,7 +209,7 @@ static void createLogicalDevice(void) {
 			.queueCount = 1,
 			.pQueuePriorities = &queuePriority,
 		};
-		vector_append(&queueCreateInfos, &queueCreateInfo);
+		vectorAppend(&queueCreateInfos, &queueCreateInfo);
 	}
 
 	VkPhysicalDeviceFeatures deviceFeatures = {0};
@@ -220,8 +219,8 @@ static void createLogicalDevice(void) {
 		.queueCreateInfoCount = (uint32_t)queueCreateInfos.length,
 		.pQueueCreateInfos = queueCreateInfos.data,
 		.pEnabledFeatures = &deviceFeatures,
-		.enabledExtensionCount = deviceExtensionCount,
-		.ppEnabledExtensionNames = deviceExtensions,
+		.enabledExtensionCount = DEVICE_EXTENSION_COUNT,
+		.ppEnabledExtensionNames = DEVICE_EXTENSIONS,
 	};
 
 	if (vkCreateDevice(physicalDevice, &createInfo, NULL, &device) !=
@@ -237,7 +236,7 @@ static void createLogicalDevice(void) {
 	printf("Vulkan Logical Device & Queues Created Successfully!\n");
 }
 
-static uint32_t clamp_u32(uint32_t value, uint32_t min, uint32_t max) {
+static uint32_t clampU32(uint32_t value, uint32_t min, uint32_t max) {
 	if (value < min)
 		return min;
 	if (value > max)
@@ -255,7 +254,7 @@ static void createSwapchain(uint32_t width, uint32_t height) {
 	vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount,
 										 NULL);
 	VECTOR_AUTO formats = VECTOR_INIT(VkSurfaceFormatKHR);
-	vector_resize(&formats, formatCount);
+	vectorResize(&formats, formatCount);
 	vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount,
 										 formats.data);
 
@@ -278,10 +277,10 @@ static void createSwapchain(uint32_t width, uint32_t height) {
 	// clamp our window size)
 	VkExtent2D extent = capabilities.currentExtent;
 	if (extent.width == UINT32_MAX) {
-		extent.width = clamp_u32(width, capabilities.minImageExtent.width,
-								 capabilities.maxImageExtent.width);
-		extent.height = clamp_u32(height, capabilities.minImageExtent.height,
-								  capabilities.maxImageExtent.height);
+		extent.width = clampU32(width, capabilities.minImageExtent.width,
+								capabilities.maxImageExtent.width);
+		extent.height = clampU32(height, capabilities.minImageExtent.height,
+								 capabilities.maxImageExtent.height);
 	}
 
 	uint32_t imageCount = capabilities.minImageCount + 1;
@@ -326,11 +325,11 @@ static void createSwapchain(uint32_t width, uint32_t height) {
 		return;
 	}
 
-	// Retrieve the swapchain VkImage handles into our long-lived vector
+	// Retrieve the swapchain VkImage handles into our long-lived Vector
 	uint32_t actualImageCount = 0;
 	vkGetSwapchainImagesKHR(device, swapchain, &actualImageCount, NULL);
 	swapchainImages = VECTOR_INIT(VkImage);
-	vector_resize(&swapchainImages, actualImageCount);
+	vectorResize(&swapchainImages, actualImageCount);
 	vkGetSwapchainImagesKHR(device, swapchain, &actualImageCount,
 							swapchainImages.data);
 
@@ -343,7 +342,7 @@ static void createSwapchain(uint32_t width, uint32_t height) {
 
 static void createImageViews(void) {
 	swapchainImageViews = VECTOR_INIT(VkImageView);
-	vector_resize(&swapchainImageViews, swapchainImages.length);
+	vectorResize(&swapchainImageViews, swapchainImages.length);
 
 	for (size_t i = 0; i < swapchainImages.length; i++) {
 		VkImage image = VECTOR_GET(swapchainImages, VkImage, i);
@@ -663,7 +662,7 @@ static void createGraphicsPipeline(void) {
 
 static void createFramebuffers(void) {
 	swapchainFramebuffers = VECTOR_INIT(VkFramebuffer);
-	vector_resize(&swapchainFramebuffers, swapchainImageViews.length);
+	vectorResize(&swapchainFramebuffers, swapchainImageViews.length);
 
 	for (size_t i = 0; i < swapchainImageViews.length; i++) {
 		VkImageView attachments[] = {
@@ -716,7 +715,7 @@ static void populateDebugMessengerCreateInfo(
 }
 
 static void setupDebugMessenger(void) {
-	if (!enableValidationLayers) {
+	if (!ENABLE_VALIDATION_LAYERS) {
 		return;
 	}
 
@@ -737,18 +736,18 @@ static bool checkValidationLayerSupport(void) {
 	vkEnumerateInstanceLayerProperties(&layerCount, NULL);
 
 	VECTOR_AUTO availableLayers = VECTOR_INIT(VkLayerProperties);
-	vector_resize(&availableLayers, layerCount);
+	vectorResize(&availableLayers, layerCount);
 
 	vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data);
 
-	for (uint32_t i = 0; i < validationLayerCount; i++) {
+	for (uint32_t i = 0; i < VALIDATION_LAYER_COUNT; i++) {
 		bool found = false;
 
 		for (size_t j = 0; j < availableLayers.length; j++) {
 			VkLayerProperties layer =
 				VECTOR_GET(availableLayers, VkLayerProperties, j);
 
-			if (strcmp(validationLayers[i], layer.layerName) == 0) {
+			if (strcmp(VALIDATION_LAYERS[i], layer.layerName) == 0) {
 				found = true;
 				break;
 			}
@@ -775,7 +774,7 @@ static bool checkExtensionSupport(const char **requiredExtensions,
 	}
 
 	VECTOR_AUTO availableExtensions = VECTOR_INIT(VkExtensionProperties);
-	vector_resize(&availableExtensions, extensionCount);
+	vectorResize(&availableExtensions, extensionCount);
 
 	if (availableExtensions.data == NULL && extensionCount > 0) {
 		printf("Failed to allocate extension memory\n");
@@ -820,7 +819,7 @@ static bool checkExtensionSupport(const char **requiredExtensions,
 	return supported;
 }
 void createInstance(void) {
-	if (enableValidationLayers && !checkValidationLayerSupport()) {
+	if (ENABLE_VALIDATION_LAYERS && !checkValidationLayerSupport()) {
 		printf("Validation layers requested, but not available!\n");
 		return;
 	}
@@ -833,18 +832,18 @@ void createInstance(void) {
 	appInfo.apiVersion = VK_API_VERSION_1_0;
 	uint32_t platformExtensionCount = 0;
 	const char **platformExtensions =
-		platform_get_required_extensions(&platformExtensionCount);
+		platformGetRequiredExtensions(&platformExtensionCount);
 	if (platformExtensions == NULL || platformExtensionCount == 0) {
 		printf("Failed to get platform Vulkan extensions\n");
 		return;
 	}
 	VECTOR_AUTO extensions = VECTOR_INIT(const char *);
 	for (uint32_t i = 0; i < platformExtensionCount; i++) {
-		vector_append(&extensions, &platformExtensions[i]);
+		vectorAppend(&extensions, &platformExtensions[i]);
 	}
-	if (enableValidationLayers) {
+	if (ENABLE_VALIDATION_LAYERS) {
 		const char *debugExt = VK_EXT_DEBUG_UTILS_EXTENSION_NAME;
-		vector_append(&extensions, &debugExt);
+		vectorAppend(&extensions, &debugExt);
 	}
 	if (!checkExtensionSupport(extensions.data, (uint32_t)extensions.length)) {
 		printf("Required Vulkan extensions are unavailable\n");
@@ -856,9 +855,9 @@ void createInstance(void) {
 	createInfo.enabledExtensionCount = (uint32_t)extensions.length;
 	createInfo.ppEnabledExtensionNames = extensions.data;
 	VkDebugUtilsMessengerCreateInfoEXT debugCreateInfo;
-	if (enableValidationLayers) {
-		createInfo.enabledLayerCount = validationLayerCount;
-		createInfo.ppEnabledLayerNames = validationLayers;
+	if (ENABLE_VALIDATION_LAYERS) {
+		createInfo.enabledLayerCount = VALIDATION_LAYER_COUNT;
+		createInfo.ppEnabledLayerNames = VALIDATION_LAYERS;
 		populateDebugMessengerCreateInfo(&debugCreateInfo);
 		createInfo.pNext = &debugCreateInfo;
 	} else {
@@ -874,13 +873,13 @@ void createInstance(void) {
 	setupDebugMessenger();
 	printf("\nVulkan Instance Created Successfully!\n");
 }
-void initVulkan(void) {
+void initializeVulkan(void) {
 	createInstance();
 	if (instance == VK_NULL_HANDLE) {
 		printf("Vulkan initialization failed\n");
 		return;
 	}
-	if (!platform_create_vulkan_surface(instance, &surface)) {
+	if (!platformCreateVulkanSurface(instance, &surface)) {
 		printf("Failed to create Vulkan window surface!\n");
 		return;
 	}
@@ -911,7 +910,7 @@ void cleanupVulkan(void) {
 		vkDestroyFramebuffer(
 			device, VECTOR_GET(swapchainFramebuffers, VkFramebuffer, i), NULL);
 	}
-	vector_free(&swapchainFramebuffers);
+	vectorFree(&swapchainFramebuffers);
 
 	if (graphicsPipeline != VK_NULL_HANDLE)
 		vkDestroyPipeline(device, graphicsPipeline, NULL);
@@ -934,9 +933,9 @@ void cleanupVulkan(void) {
 			vkDestroyImageView(device, view, NULL);
 		}
 	}
-	vector_free(&swapchainImageViews);
+	vectorFree(&swapchainImageViews);
 
-	vector_free(&swapchainImages);
+	vectorFree(&swapchainImages);
 	if (swapchain != VK_NULL_HANDLE) {
 		vkDestroySwapchainKHR(device, swapchain, NULL);
 		swapchain = VK_NULL_HANDLE;
@@ -953,7 +952,7 @@ void cleanupVulkan(void) {
 		surface = VK_NULL_HANDLE;
 		printf("Vulkan Surface Destroyed\n");
 	}
-	if (enableValidationLayers && debugMessenger != VK_NULL_HANDLE) {
+	if (ENABLE_VALIDATION_LAYERS && debugMessenger != VK_NULL_HANDLE) {
 		PFN_vkDestroyDebugUtilsMessengerEXT func =
 			(PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(
 				instance, "vkDestroyDebugUtilsMessengerEXT");

@@ -1,13 +1,10 @@
-#ifndef HOLLOWENGINE_VULKAN_HEADER
-#define HOLLOWENGINE_VULKAN_HEADER
+#pragma once
 
 #include <vulkan/vulkan_core.h>
 
 extern VkInstance instance;
 
-void initVulkan();
-void createInstance();
-void cleanupVulkan();
-void drawVulkanFrame();
-
-#endif
+void initializeVulkan(void);
+void createInstance(void);
+void cleanupVulkan(void);
+void drawVulkanFrame(void);

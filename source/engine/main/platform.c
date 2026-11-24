@@ -3,11 +3,9 @@
 
 GLFWwindow *window = nullptr;
 
-GLFWwindow* platform_get_window() {
-	return window;
-}
+GLFWwindow *platformGetWindow(void) { return window; }
 
-bool platform_init(WindowsSpecification *WindowsSpecs) {
+bool platformInit(WindowSpecification *windowSpecs) {
 
 	if (!glfwInit()) {
 		printf("GLFW init error\n");
@@ -16,8 +14,8 @@ bool platform_init(WindowsSpecification *WindowsSpecs) {
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	window = glfwCreateWindow(WindowsSpecs->Width, WindowsSpecs->Height,
-							  WindowsSpecs->title, NULL, NULL);
+	window = glfwCreateWindow(windowSpecs->width, windowSpecs->height,
+							  windowSpecs->title, NULL, NULL);
 
 	if (!window) {
 		glfwTerminate();
@@ -26,20 +24,21 @@ bool platform_init(WindowsSpecification *WindowsSpecs) {
 	return true;
 }
 
-void platform_update() { glfwPollEvents(); }
+void platformUpdate(void) { glfwPollEvents(); }
 
-void platform_shutdown() { glfwTerminate(); }
+void platformShutdown(void) { glfwTerminate(); }
 
-bool platform_shouldclose() { return glfwWindowShouldClose(window); }
+bool platformShouldClose(void) { return glfwWindowShouldClose(window); }
 
-
-const char **platform_get_required_extensions(uint32_t *out_count) {
-	return glfwGetRequiredInstanceExtensions(out_count);
+const char **platformGetRequiredExtensions(uint32_t *outCount) {
+	return glfwGetRequiredInstanceExtensions(outCount);
 }
 
-bool platform_create_vulkan_surface(VkInstance instance, VkSurfaceKHR *out_surface) {
-	if (window == NULL || instance == VK_NULL_HANDLE || out_surface == NULL) {
+bool platformCreateVulkanSurface(VkInstance instance,
+								 VkSurfaceKHR *outSurface) {
+	if (window == NULL || instance == VK_NULL_HANDLE || outSurface == NULL) {
 		return false;
 	}
-	return glfwCreateWindowSurface(instance, window, NULL, out_surface) == VK_SUCCESS;
+	return glfwCreateWindowSurface(instance, window, NULL, outSurface) ==
+		   VK_SUCCESS;
 }
