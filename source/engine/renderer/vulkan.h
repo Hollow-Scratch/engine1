@@ -8,5 +8,6 @@ extern VkInstance instance;
 void initVulkan();
 void createInstance();
 void cleanupVulkan();
+void drawVulkanFrame();
 
 #endif
