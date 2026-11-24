@@ -3,6 +3,10 @@
 
 GLFWwindow *window = nullptr;
 
+GLFWwindow* platform_get_window() {
+	return window;
+}
+
 bool platform_init(WindowsSpecification *WindowsSpecs) {
 
 	if (!glfwInit()) {
@@ -27,3 +31,15 @@ void platform_update() { glfwPollEvents(); }
 void platform_shutdown() { glfwTerminate(); }
 
 bool platform_shouldclose() { return glfwWindowShouldClose(window); }
+
+
+const char **platform_get_required_extensions(uint32_t *out_count) {
+	return glfwGetRequiredInstanceExtensions(out_count);
+}
+
+bool platform_create_vulkan_surface(VkInstance instance, VkSurfaceKHR *out_surface) {
+	if (window == NULL || instance == VK_NULL_HANDLE || out_surface == NULL) {
+		return false;
+	}
+	return glfwCreateWindowSurface(instance, window, NULL, out_surface) == VK_SUCCESS;
+}
