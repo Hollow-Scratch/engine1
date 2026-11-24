@@ -14,6 +14,7 @@ add_executable( HollowEngine
 	source/engine/main/game_test.c
 	source/engine/main/platform.c
 	source/engine/renderer/vulkan.c
+	source/engine/utils/vector.c
 )
 
 add_subdirectory(external/glfw)
