@@ -1,4 +1,5 @@
 #include "app.h"
+
 #include <stdio.h>
 
 void initializeApp(void) {}

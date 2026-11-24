@@ -4,14 +4,16 @@
 #include <stddef.h>
 
 typedef struct Vector {
-	void *data;
+	void  *data;
 	size_t length;
 	size_t capacity;
 	size_t elementSize;
 } Vector;
 
-#define VECTOR_INIT(type)                                                      \
-	(Vector) { .elementSize = sizeof(type) }
+#define VECTOR_INIT(type)                                                                          \
+	(Vector) {                                                                                     \
+		.elementSize = sizeof(type)                                                                \
+	}
 #define VECTOR_GET(vec, type, index) (((type *)(vec).data)[index])
 #define VECTOR_AUTO __attribute__((cleanup(vectorFree))) Vector
 

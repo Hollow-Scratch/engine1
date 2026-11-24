@@ -1,13 +1,13 @@
-#include "../renderer/vulkan.h"
 #include "app.h"
-#include "platform.h"
+#include "platform/platform.h"
+#include "renderer/vulkan.h"
 
 bool isRunning = true;
 
 WindowSpecification specs = {
-	.width = 1920,
+	.width	= 1920,
 	.height = 1080,
-	.title = "HollowEngine",
+	.title	= "HollowEngine",
 };
 
 int main(void) {

@@ -12,7 +12,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_executable( HollowEngine
 	source/engine/main/main.c
 	source/engine/main/game_test.c
-	source/engine/main/platform.c
+	source/engine/platform/platform.c
 	source/engine/renderer/vulkan.c
 	source/engine/utils/vector.c
 )
@@ -22,6 +22,10 @@ add_subdirectory(external/glfw)
 find_package(Vulkan REQUIRED)
 
 target_link_libraries(HollowEngine PRIVATE Vulkan::Vulkan glfw)
+
+target_include_directories(HollowEngine PRIVATE
+    "${PROJECT_SOURCE_DIR}/source/engine"
+)
 
 if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
 	target_compile_options(HollowEngine PRIVATE -Wall -Wextra -Wstrict-prototypes)

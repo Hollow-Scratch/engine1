@@ -1,0 +1,64 @@
+
+---
+Language: C
+BasedOnStyle: LLVM
+
+
+# Indentation: hard tabs, width 4
+IndentWidth: 4
+TabWidth: 4
+UseTab: Always
+
+# Line width
+ColumnLimit: 100
+ContinuationIndentWidth: 4
+
+# Braces
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AllowShortBlocksOnASingleLine: Never
+
+# Pointer alignment
+PointerAlignment: Right
+DerivePointerAlignment: false
+
+# Spacing
+SpaceBeforeParens: ControlStatements
+SpaceInEmptyParentheses: false
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true
+
+# Alignment
+AlignAfterOpenBracket: Align
+AlignOperands: Align
+AlignTrailingComments: true
+
+AlignConsecutiveAssignments:
+    Enabled: true
+    AcrossEmptyLines: false
+    AcrossComments: false
+
+AlignConsecutiveDeclarations:
+    Enabled: true
+    AcrossEmptyLines: false
+    AcrossComments: false
+
+# Includes
+SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+
+# Comments
+ReflowComments: true
+
+# Preprocessor
+IndentPPDirectives: AfterHash
+PPIndentWidth: 4
+
+# Empty lines
+MaxEmptyLinesToKeep: 1
+KeepEmptyLinesAtTheStartOfBlocks: false
+
+# find source/ -type f \( -name '*.c' -o -name '*.h' \) \
+#    -print0 | xargs -0 clang-format -i
