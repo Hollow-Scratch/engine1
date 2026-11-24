@@ -2,13 +2,13 @@
 
 #include <stdio.h>
 
-GLFWwindow *window = nullptr;
+GLFWwindow *g_window = nullptr;
 
-GLFWwindow *platformGetWindow(void) {
-	return window;
+GLFWwindow *PlatformGetWindow(void) {
+	return g_window;
 }
 
-bool platformInit(WindowSpecification *windowSpecs) {
+bool PlatformInit(WindowSpecification *window_specs) {
 	if (!glfwInit()) {
 		printf("GLFW init error\n");
 		return -1;
@@ -16,35 +16,35 @@ bool platformInit(WindowSpecification *windowSpecs) {
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	window =
-		glfwCreateWindow(windowSpecs->width, windowSpecs->height, windowSpecs->title, NULL, NULL);
+	g_window = glfwCreateWindow(window_specs->width, window_specs->height, window_specs->title,
+								NULL, NULL);
 
-	if (!window) {
+	if (!g_window) {
 		glfwTerminate();
 		return -1;
 	}
 	return true;
 }
 
-void platformUpdate(void) {
+void PlatformUpdate(void) {
 	glfwPollEvents();
 }
 
-void platformShutdown(void) {
+void PlatformShutdown(void) {
 	glfwTerminate();
 }
 
-bool platformShouldClose(void) {
-	return glfwWindowShouldClose(window);
+bool PlatformShouldClose(void) {
+	return glfwWindowShouldClose(g_window);
 }
 
-const char **platformGetRequiredExtensions(uint32_t *outCount) {
-	return glfwGetRequiredInstanceExtensions(outCount);
+const char **PlatformGetRequiredExtensions(uint32_t *out_count) {
+	return glfwGetRequiredInstanceExtensions(out_count);
 }
 
-bool platformCreateVulkanSurface(VkInstance instance, VkSurfaceKHR *outSurface) {
-	if (window == NULL || instance == VK_NULL_HANDLE || outSurface == NULL) {
+bool PlatformCreateVulkanSurface(VkInstance instance, VkSurfaceKHR *out_surface) {
+	if (g_window == NULL || instance == VK_NULL_HANDLE || out_surface == NULL) {
 		return false;
 	}
-	return glfwCreateWindowSurface(instance, window, NULL, outSurface) == VK_SUCCESS;
+	return glfwCreateWindowSurface(instance, g_window, NULL, out_surface) == VK_SUCCESS;
 }

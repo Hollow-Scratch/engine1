@@ -11,8 +11,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_executable( HollowEngine
 	source/engine/main/main.c
-	source/engine/main/game_test.c
 	source/engine/main/time.c
+	source/engine/main/dynamic_library.c
 	source/engine/platform/platform.c
 	source/engine/renderer/vulkan.c
 	source/engine/utils/vector.c
@@ -24,6 +24,9 @@ find_package(Vulkan REQUIRED)
 
 target_link_libraries(HollowEngine PRIVATE Vulkan::Vulkan glfw)
 
+target_include_directories(HollowEngine PUBLIC
+    "${PROJECT_SOURCE_DIR}/include"
+)
 target_include_directories(HollowEngine PRIVATE
     "${PROJECT_SOURCE_DIR}/source/engine"
 )

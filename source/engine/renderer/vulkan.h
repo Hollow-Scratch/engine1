@@ -2,9 +2,9 @@
 
 #include <vulkan/vulkan_core.h>
 
-extern VkInstance instance;
+extern VkInstance g_instance;
 
-void initializeVulkan(void);
-void createInstance(void);
-void cleanupVulkan(void);
-void drawVulkanFrame(void);
+void InitializeVulkan(void);
+void CreateInstance(void);
+void CleanupVulkan(void);
+void DrawVulkanFrame(void);

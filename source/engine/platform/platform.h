@@ -12,12 +12,12 @@ typedef struct WindowSpecification {
 	int			height;
 } WindowSpecification;
 
-extern GLFWwindow *window;
+extern GLFWwindow *g_window;
 
-GLFWwindow	*platformGetWindow(void);
-bool		 platformInit(WindowSpecification *windowSpecs);
-void		 platformUpdate(void);
-void		 platformShutdown(void);
-bool		 platformShouldClose(void);
-const char **platformGetRequiredExtensions(uint32_t *outCount);
-bool		 platformCreateVulkanSurface(VkInstance instance, VkSurfaceKHR *outSurface);
+GLFWwindow	*PlatformGetWindow(void);
+bool		 PlatformInit(WindowSpecification *window_specs);
+void		 PlatformUpdate(void);
+void		 PlatformShutdown(void);
+bool		 PlatformShouldClose(void);
+const char **PlatformGetRequiredExtensions(uint32_t *out_count);
+bool		 PlatformCreateVulkanSurface(VkInstance instance, VkSurfaceKHR *out_surface);

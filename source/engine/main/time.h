@@ -8,11 +8,11 @@ typedef struct {
 	double frame_rate;
 } EngineTime;
 
-void time_init(void);
-void time_update(void);
+void TimeInit(void);
+void TimeUpdate(void);
 
-double time_get_delta(void);
-double time_get_elapsed(void);
-double time_get_fps(void);
+double TimeGetDelta(void);
+double TimeGetElapsed(void);
+double TimeGetFps(void);
 
 #endif

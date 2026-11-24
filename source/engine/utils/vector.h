@@ -7,17 +7,17 @@ typedef struct Vector {
 	void  *data;
 	size_t length;
 	size_t capacity;
-	size_t elementSize;
+	size_t element_size;
 } Vector;
 
 #define VECTOR_INIT(type)                                                                          \
 	(Vector) {                                                                                     \
-		.elementSize = sizeof(type)                                                                \
+		.element_size = sizeof(type)                                                               \
 	}
 #define VECTOR_GET(vec, type, index) (((type *)(vec).data)[index])
-#define VECTOR_AUTO __attribute__((cleanup(vectorFree))) Vector
+#define VECTOR_AUTO __attribute__((cleanup(VectorFree))) Vector
 
-void vectorAppend(Vector *vec, const void *value);
-bool vectorPop(Vector *vec, void *outValue);
-void vectorResize(Vector *vec, size_t newLength);
-void vectorFree(Vector *vec);
+void VectorAppend(Vector *vec, const void *value);
+bool VectorPop(Vector *vec, void *out_value);
+void VectorResize(Vector *vec, size_t new_length);
+void VectorFree(Vector *vec);
