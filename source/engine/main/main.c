@@ -21,8 +21,9 @@ int main() {
 		platform_update();
 	}
 
-	Shutdown();
+	cleanupVulkan();
 	platform_shutdown();
+	Shutdown();
 
 	return 0;
 }
