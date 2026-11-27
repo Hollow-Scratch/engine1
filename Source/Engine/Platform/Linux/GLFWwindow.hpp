@@ -22,6 +22,7 @@ class GLFWwindow final : public Platform {
 
   private:
 	::GLFWwindow *m_window = nullptr;
+	bool m_hasOpenGLContext = false;
 };
 } // namespace HollowEngine
 

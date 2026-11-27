@@ -1,10 +1,15 @@
 #include "DynamicLibrary.hpp"
+#include "../RuntimeError.hpp"
 #include <dlfcn.h>
 #include <iostream>
+#include <stdexcept>
+#include <utility>
 
 namespace HollowEngine {
 
-DynamicLibrary::~DynamicLibrary() { UnLoad(); }
+DynamicLibrary::~DynamicLibrary() {
+	RunGuarded("Game module unload", [this] { UnLoad(); });
+}
 
 bool DynamicLibrary::Load(const char *path) {
 	if (path == nullptr) {
@@ -40,9 +45,9 @@ void *DynamicLibrary::GetSymbol(const char *symbol) {
 }
 
 void DynamicLibrary::UnLoad() {
-	if (handle != nullptr) {
-		dlclose(handle);
-		handle = nullptr;
+	if (handle && dlclose(std::exchange(handle, nullptr)) != 0) {
+		const char *error = dlerror();
+		throw std::runtime_error(error ? error : "dlclose failed");
 	}
 }
 

@@ -16,7 +16,7 @@ class DynamicLibrary {
 	void UnLoad();
 
   private:
-	void *handle;
+	void *handle = nullptr;
 };
 } // namespace HollowEngine
 

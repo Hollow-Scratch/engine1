@@ -2,7 +2,8 @@ find_package(Vulkan REQUIRED)
 find_package(OpenGL REQUIRED)
 
 add_executable(HollowEngine
-				Main/main.cc
+				main.cc
+				Engine.cc
 				Main/DynamicLibrary.cc
 				Platform/Platform.cc
 				Platform/Linux/GLFWwindow.cc
