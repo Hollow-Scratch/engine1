@@ -1,31 +1,29 @@
+#include "../Platform/Platform.hpp"
 #include "DynamicLibrary.hpp"
-#include <limits.h>
-#include <unistd.h>
+#include <GL/gl.h>
 #include <filesystem>
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 std::filesystem::path GetExecutableDirectory() {
-    char path[PATH_MAX];
+	char path[PATH_MAX];
 
-    ssize_t length = readlink("/proc/self/exe", path, sizeof(path) - 1);
+	ssize_t length = readlink("/proc/self/exe", path, sizeof(path) - 1);
 
-    if (length == -1)
-        return {};
+	if (length == -1)
+		return {};
 
-    path[length] = '\0';
+	path[length] = '\0';
 
-    return std::filesystem::path(path).parent_path();
+	return std::filesystem::path(path).parent_path();
 }
 typedef void (*GameInitFn)(void);
 typedef void (*GameUpdateFn)(double delta_time);
 typedef void (*GameShutdownFn)(void);
 
-bool g_is_running = true;
-
-int main(void) {
-
-
+int main() {
 	// Load game module
 	auto game_path = GetExecutableDirectory() / "libgame.so";
 	HollowEngine::DynamicLibrary game;
@@ -46,23 +44,28 @@ int main(void) {
 
 	if (!game_init || !game_update || !game_shutdown) {
 		fprintf(stderr, "Game module is missing required functions\n");
-		game.UnLoad();
 		return EXIT_FAILURE;
 	}
 
-	// Initialize game
-	game_init();
+	const HollowEngine::WindowsSpecification spec = {
+		.Width = 1920, .Height = 1080, .Title = "HollowEngine",
+		.Api = HollowEngine::GraphicsAPI::OpenGL};
 
-	// Main loop
-	while (g_is_running) {
-		game_update(0.016);
+	auto window = HollowEngine::Platform::Create();
+	window->CreateWindow(spec);
+	if (!window->GetWindowHandler()) {
+		return EXIT_FAILURE;
 	}
 
-		game_shutdown();
+	game_init();
+	while (!window->WindowShouldClose()) {
+		window->Update();
+		glClear(GL_COLOR_BUFFER_BIT);
+		game_update(0.016);
+		window->SwapBuffers();
+	}
+	game_shutdown();
+	window->Shutdown();
 
-		// Unload game module
-		game.UnLoad();
-
-		return EXIT_SUCCESS;
-	
+	return EXIT_SUCCESS;
 }
